@@ -1,11 +1,8 @@
-#ifndef UTILS_H
-#define UTILS_H
-#include <string>
-#include <iostream>
+#include<string>
 class Utils
 {
 public:
-    Utils();
+     Utils(){}
     static std::string getCmdResult(const std::string &cmd){
         if(cmd.size()==0) return "";
         FILE *fft = nullptr;
@@ -24,13 +21,16 @@ public:
     static std::string preAdbRootCmd(){
         return "adb root && adb remount";
     }
-    static std::string getAndroidPhoneMemCmd(){
+    static std::string getShellMemCmd(){
         return "adb shell \"cat /proc/meminfo \"";
     }
-    static std::string getLinuxPCMemCmd(){
+    static std::string getLinuxMemCmd(){
+        return "cat /proc/meminfo";
+    }
+    static std::string getLinuxCPUCmd(){
         return "cat /proc/stat";
     }
-
+    static std::string getShellCPUCmd(){
+        return "adb shell \"cat /proc/stat \"";
+    }
 };
-
-#endif // UTILS_H
