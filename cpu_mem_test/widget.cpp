@@ -4,27 +4,56 @@
 #include <QSplineSeries>
 #include <QValueAxis>
 #include <QDebug>
+
+string const Widget:: DATA_FILE_NAME="cpuAndMemData.txt";
+string const Widget:: DATA_DIR = "data";
 Widget::Widget(QWidget *parent)
     : QWidget(parent)
-    , ui(new Ui::Widget)
+    , ui(new Ui::Widget),log(QString::fromStdString(DATA_DIR+"/"+DATA_FILE_NAME))
 {
     ui->setupUi(this);
-    creatImg();
+    creatFile();
+//    creatImg();
     timer = new QTimer(this);
-    //timer->start(500);
+    timer->start(500);
     connect(timer, SIGNAL(timeout()), this, SLOT(update()));
 }
-void Widget::update(){
-    static int x = 0;
-    data->append(x++,qrand()%200);
-    qDebug()<<x<<"\n";
 
-    if(x >=20) {
-        static int  index = 0;
-        data->remove(index);
-        m_chart->scroll(10,0);
+
+void Widget::update(){
+    CPUInfo now;
+    now.setInfo(Utils::getCmdResult(Utils::getLinuxCPUCmd()));
+    now.cal();
+    auto v = CPUInfo::calOneUsge(cpuInfoBefore,now);
+    cpuInfoBefore = now;
+
+    QVector<double> qv;
+    qv.push_back(clock()/1000.0);
+    for(auto &u:v) qv.push_back(u);
+
+    log.write(qv);
+
+    for(int i = 0;i < (int)v.size(); ++i) {
+    //    cout<<"CPU "<<i<<":"<<v[i]<<",";
     }
+//    cout<<endl;
 }
+void Widget::creatFile() {
+
+    QString sAppPath = QCoreApplication::applicationDirPath();
+    string filepath = sAppPath.toStdString() +"/"+ DATA_DIR+"/"+DATA_FILE_NAME;
+    QDir dir(QString::fromStdString(sAppPath.toStdString()+"/"+DATA_DIR));
+    if(!dir.exists()) {
+        bool ok = dir.mkdir(QString::fromStdString(sAppPath.toStdString()+"/"+DATA_DIR));
+    }
+    QFile file(QString::fromStdString(filepath));
+    file.open(QIODevice::WriteOnly);
+    if(!file.exists()) {
+
+    }
+    file.close();
+}
+
 void Widget:: creatImg(){
     m_chart = new QChart();
 

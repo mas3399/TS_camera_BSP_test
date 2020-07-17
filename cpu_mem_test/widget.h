@@ -5,7 +5,14 @@
 #include <QChart>
 #include <QChartView>
 #include <QTimer>
+#include <QVector>
 #include <QSplineSeries>
+#include "CPUInfo.h"
+#include "Utils.h"
+#include <QDir>
+#include <QFile>
+#include "datalog.h"
+#include <bits/stdc++.h>
 QT_BEGIN_NAMESPACE
 namespace Ui { class Widget; }
 QT_END_NAMESPACE
@@ -17,6 +24,7 @@ class Widget : public QWidget
 public:
     Widget(QWidget *parent = nullptr);
     void creatImg();
+    void creatFile();
     ~Widget();
 public slots :
    void update();
@@ -25,5 +33,9 @@ private:
     QTimer *timer;
     QSplineSeries *data;
     QChart *m_chart;
+    CPUInfo cpuInfoBefore;
+    datalog log;
+    static const string DATA_FILE_NAME;
+    static const string DATA_DIR;
 };
 #endif // WIDGET_H
