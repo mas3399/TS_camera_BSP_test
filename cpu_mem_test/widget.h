@@ -25,17 +25,24 @@ public:
     Widget(QWidget *parent = nullptr);
     void creatImg();
     void creatFile();
+    void startButton();
+    void stopButton();
+    void addMEMData(QPointF p,double offset);
+    void addCPUData(QPointF p,double offset);
     ~Widget();
 public slots :
    void update();
+   void startAndStopButton();
 private:
     Ui::Widget *ui;
     QTimer *timer;
     QSplineSeries *data;
     QChart *m_chart;
     CPUInfo cpuInfoBefore;
+    bool btstate;
     datalog log;
-    static const string DATA_FILE_NAME;
+    long long preTime;
+    QVector<QPointF> CPUdata,MEMdata;    static const string DATA_FILE_NAME;
     static const string DATA_DIR;
 };
 #endif // WIDGET_H
