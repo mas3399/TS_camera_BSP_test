@@ -14,6 +14,10 @@ public:
         public:
         ll totTime,freeTime;
         static double calOneCPU(OneCPU c1,OneCPU c2){
+            if(c2.totTime == c1.totTime) return 0.0;
+            if((c2.freeTime - c1.freeTime)/(c2.totTime - c1.totTime) < 0) {
+         //       cout<<"MMP laji dongxi ~!~~~~~!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n";
+            }
             return 1 - 1.0*(c2.freeTime - c1.freeTime)/(c2.totTime - c1.totTime);
         }
 

@@ -3,8 +3,8 @@
 #include <QCoreApplication>
 #include <qdir.h>
 const int datalog:: TIME_LEN_F = 10;
-const int datalog:: CPU_LEN_F = 8;//8
-const int datalog:: MEM_LEN_F = 8;//8
+const int datalog:: CPU_LEN_F = 12;//8
+const int datalog:: MEM_LEN_F = 12;//12
 static const string DATA_DIR = "data";
 static const string DATA_FILE_NAME = "cpuAndMemData.txt";
 void creatFile() {
@@ -39,7 +39,12 @@ datalog::datalog(QString path):log(path){
     creatFile();
     bool ok= log.open(QIODevice::WriteOnly);
     cout<<ok<<endl;;
-
+}
+void datalog::open(){
+    if(!log.isOpen()) log.open(QIODevice::WriteOnly);
+}
+void datalog::close(){
+    if(log.isOpen()) log.close();
 }
 
 void datalog::printHead(int cpuNum){
@@ -50,34 +55,31 @@ void datalog::printHead(int cpuNum){
     nowLen = info.size();
 
     //CPU
-    info += "CPU AVG";
+    info += "CPU-AVG(%)";
     pushBlack(info,CPU_LEN_F-(info.size() - nowLen));
     pushTab(info);
     nowLen = info.size();
 
     for(int i = 0;i < cpuNum;++i) {
-        info += "CPU"+to_string(i);
+        info += "CPU"+to_string(i)+"(%)";
         pushBlack(info,CPU_LEN_F-(info.size() - nowLen));
         pushTab(info);
         nowLen = info.size();
     }
 
     // TODO 内存
-    info += "Tot MEM";
+    info += "TotMEM(kB)";
     pushBlack(info,(MEM_LEN_F-(info.size()-nowLen)));
     pushTab(info);
     nowLen = info.size();
-    info += "Used MEM";
-    pushBlack(info,(MEM_LEN_F-(info.size()-nowLen)));
-    pushTab(info);
-    nowLen = info.size();
-    info+="\n";
+    info += "Used-MEM(KB)";
+    info +="\n";
     log.write(info.c_str());
     cout<<info<<endl;
 }
 
 void datalog::printOneData(QVector<double> &vb){
-    int nowLen = 0,pos = 0,numCPU = vb.size()-2;
+    int nowLen = 0,pos = 0,numCPU = vb.size()-4;
     string data = "";
 
     if(numCPU<=0) return ;
@@ -86,7 +88,7 @@ void datalog::printOneData(QVector<double> &vb){
     }
 
     //TIME
-    data += Utils::DoubleToString(vb.at(pos++),2);
+    data += Utils::DoubleToString(vb.at(pos++),3);
     pushBlack(data,TIME_LEN_F-(data.size()-nowLen)),pushTab(data);
     nowLen = data.size();
 
@@ -101,11 +103,10 @@ void datalog::printOneData(QVector<double> &vb){
     }
     if(pos != vb.size()) {
         //MEM
-        data += Utils::DoubleToString(vb.at(pos++),2);
+        data += Utils::DoubleToString(vb.at(pos++),0);
         pushBlack(data,MEM_LEN_F-(data.size()-nowLen)),pushTab(data);
         nowLen = data.size();
-        data += Utils::DoubleToString(vb.at(pos++),2);
-        pushBlack(data,MEM_LEN_F-(data.size()-nowLen));
+        data += Utils::DoubleToString(vb.at(pos++),0);
         nowLen = data.size();
     }
     if(data.size()) {

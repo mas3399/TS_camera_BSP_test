@@ -50,7 +50,7 @@ public:
         std::string res = std::move(out.str());
         auto pos = res.find('.');
         if (pos == std::string::npos)
-            return res+".00";
+            return res;
 
         auto splitLen = pos + 1 + precisionAfterPoint;
         if (res.size() <= splitLen)

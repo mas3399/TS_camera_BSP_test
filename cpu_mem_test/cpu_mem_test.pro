@@ -23,6 +23,7 @@ SOURCES += \
     widget.cpp
 
 HEADERS += \
+    MEMinfo.h \
     datalog.h \
     widget.h
 

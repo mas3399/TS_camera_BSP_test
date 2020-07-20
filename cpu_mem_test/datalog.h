@@ -14,6 +14,8 @@ public:
     void write(QVector<double> &v);
     void printOneData(QVector<double> &vb);
     void printHead(int x);
+    void open();
+    void close();
     ~datalog();
 private:
     QFile log;

@@ -13,6 +13,7 @@
 #include <QFile>
 #include "datalog.h"
 #include <bits/stdc++.h>
+#include "MEMinfo.h"
 QT_BEGIN_NAMESPACE
 namespace Ui { class Widget; }
 QT_END_NAMESPACE
@@ -26,16 +27,16 @@ public:
     void creatImg();
     void creatFile();
     void startButton();
-    void stopButton();
     void addMEMData(QPointF p,double offset);
     void addCPUData(QPointF p,double offset);
     ~Widget();
 public slots :
    void update();
    void startAndStopButton();
+   void stopButton();
 private:
     Ui::Widget *ui;
-    QTimer *timer;
+    QTimer *timer,*ctrTimer;
     QSplineSeries *data;
     QChart *m_chart;
     CPUInfo cpuInfoBefore;
