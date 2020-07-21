@@ -9,7 +9,8 @@
 static const int MAX_WIN_TIME = 30;
 static const int TIMER_C = 150;
 static long long firstTime = 0;
-static int TIME_DEBUT = 3*1000;
+static int TIME_DEBUT = 3;//S
+
 string const Widget:: DATA_FILE_NAME="cpuAndMemData.txt";
 string const Widget:: DATA_DIR = "data";
 
@@ -44,7 +45,7 @@ void Widget::update(){
 
     //cpu
     CPUInfo now;
-    now.setInfo(Utils::getCmdResult(Utils::getLinuxCPUCmd()));
+    now.setInfo(Utils::getCmdResult(Utils::getShellCPUCmd()));
     now.cal();
     long long nowTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
     auto v = CPUInfo::calOneUsge(cpuInfoBefore,now);
@@ -54,12 +55,12 @@ void Widget::update(){
     MEMinfo mem = MEMinfo :: calMem();
 
     //set on text
-    QString totMem = "0",avMem = "0",totCPU = "0";
-    totMem = QString::fromStdString(Utils::DoubleToString(mem.getTotMem()/1024.0/1024,1));
-    avMem = QString::fromStdString(Utils::DoubleToString(mem.getAvMem()/1024.0,1));
+    QString totMem = "0GB",avMem = "0GB",totCPU = "0";
+    totMem = Utils::getHshow(mem.getTotMem());
+    avMem = Utils::getHshow(mem.getAvMem());
     if(v.size() > 0) totCPU = QString::fromStdString(Utils::DoubleToString(v[0],1));
-    ui->label->setText("Total memory: "+totMem +"GB");
-    ui->label_2->setText("Available memory: "+avMem +"MB");
+    ui->label->setText("Total memory: "+totMem);
+    ui->label_2->setText("Available memory: "+avMem);
     ui->label_3->setText("Total CPU usage: "+totCPU+"%");
 
     //jia dao img
@@ -87,9 +88,19 @@ void Widget::startButton(){
     cout<<"start!\n";
 
     if(timer->isActive()) return ;
+
+    int TOTtime = TIME_DEBUT;
+    if(ui->lineEdit->text().size() > 0) {
+        TOTtime = ui->lineEdit->text().toInt();
+    }
+    int pre_time = TIMER_C;
+    if(ui->lineEdit_2->text().size() > 0) {
+       pre_time = ui->lineEdit_2->text().toInt();
+    }
+
     firstTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
     log.open();
-    ctrTimer->start(TIME_DEBUT);
+    ctrTimer->start(TOTtime*1000);
     update();
     btstate ^= 1;
     CPUdata.clear();
@@ -97,7 +108,7 @@ void Widget::startButton(){
     ui->pushButton->setText("stop");
     ui->pushButton->setStyleSheet
             ("background-color: rgb(238, 99, 99);");
-    timer->start(TIMER_C);
+    timer->start(pre_time);
 }
 
 
@@ -129,10 +140,13 @@ void Widget:: addCPUData(QPointF p,double offset){
 void Widget:: addMEMData(QPointF p,double offset){
     p.rx() = 0;
     cout<<offset<<' '<<MEMdata.size()<<endl;
-    for(auto &u:MEMdata)  u.rx()+=offset;
+    double mxy = 0;
+    for(auto &u:MEMdata)  u.rx()+=offset,mxy = max(mxy,u.ry());
     MEMdata.append(p);
     while(MEMdata.first().rx()>MAX_WIN_TIME) MEMdata.remove(0);
     QSplineSeries * memLine = (QSplineSeries*)m_chart->series().last();
+    memY->setMax(max(mxy*1.2,1000.0));
+
     memLine->replace(MEMdata);
 }
 
@@ -174,7 +188,7 @@ void Widget:: creatImg(){
     m_chart->addAxis(y2,Qt::AlignRight);
     memLine->attachAxis(axisX);
     memLine->attachAxis(y2);
-
+    memY = y2;
 
     /*series1->setColor(QColor(0,100,255));
     series1->setName("cpu");

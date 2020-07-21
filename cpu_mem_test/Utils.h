@@ -2,7 +2,7 @@
 #define UTILS_H
 #include<string>
 #include <bits/stdc++.h>
-
+#include<QString>
 
 class Utils
 {
@@ -28,7 +28,7 @@ public:
         return "adb root && adb remount";
     }
     static std::string getShellMemCmd(){
-        return "adb shell \"cat /proc/meminfo \"";
+        return "adb shell \"cat /proc/meminfo  \"";
     }
     static std::string getLinuxMemCmd(){
         return "cat /proc/meminfo";
@@ -37,7 +37,7 @@ public:
         return "cat /proc/stat | grep \"cpu\"";
     }
     static std::string getShellCPUCmd(){
-        return "adb shell \"cat /proc/stat \"";
+        return "adb shell \"cat /proc/stat | grep \"cpu\" \"";
     }
 
     static std::string DoubleToString(const double value, unsigned int precisionAfterPoint)
@@ -58,6 +58,15 @@ public:
         res = res.substr(0,splitLen);
         //std::cout<<res<<std::endl;
         return res;
+    }
+    static QString getHshow(double x){
+        if(x > 1024*1024) {
+            return QString::fromStdString(DoubleToString(x/1024/1024,2))+"GB";
+        }
+        if(x > 1024) {
+            return QString::fromStdString(DoubleToString(x/1024,2))+"MB";
+        }
+        return QString::fromStdString(DoubleToString(x,0))+"KB";
     }
 };
 #endif

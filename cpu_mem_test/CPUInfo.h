@@ -31,6 +31,7 @@ public:
         }
         OneCPU(string oneInfo) {
             int p = -1;
+         //   cout<<oneInfo<<endl;
             ll sum = 0, one4 = 0,index = 0;
             p = oneInfo.find_first_of(" ");
             while(oneInfo[p+1] == ' ') p++;

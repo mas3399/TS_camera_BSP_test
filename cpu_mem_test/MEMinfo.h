@@ -50,7 +50,7 @@ public:
     }
 
     static MEMinfo calMem(){
-        return MEMinfo(Utils::getCmdResult(Utils::getLinuxMemCmd()));
+        return MEMinfo(Utils::getCmdResult(Utils::getShellMemCmd()));
     }
 };
 

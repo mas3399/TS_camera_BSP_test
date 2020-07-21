@@ -11,6 +11,7 @@
 #include "Utils.h"
 #include <QDir>
 #include <QFile>
+#include <qvalueaxis.h>
 #include "datalog.h"
 #include <bits/stdc++.h>
 #include "MEMinfo.h"
@@ -45,5 +46,6 @@ private:
     long long preTime;
     QVector<QPointF> CPUdata,MEMdata;    static const string DATA_FILE_NAME;
     static const string DATA_DIR;
+    QValueAxis *memY;
 };
 #endif // WIDGET_H
