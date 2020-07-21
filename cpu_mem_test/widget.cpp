@@ -59,9 +59,9 @@ void Widget::update(){
     totMem = Utils::getHshow(mem.getTotMem());
     avMem = Utils::getHshow(mem.getAvMem());
     if(v.size() > 0) totCPU = QString::fromStdString(Utils::DoubleToString(v[0],1));
-    ui->label->setText("Total memory: "+totMem);
-    ui->label_2->setText("Available memory: "+avMem);
-    ui->label_3->setText("Total CPU usage: "+totCPU+"%");
+    ui->label->setText("总内存: "+totMem);
+    ui->label_2->setText("可用内存: "+avMem);
+    ui->label_3->setText("总CPU使用率: "+totCPU+"%");
 
     //jia dao img
     QVector<double> qv;
@@ -105,7 +105,7 @@ void Widget::startButton(){
     btstate ^= 1;
     CPUdata.clear();
     MEMdata.clear();
-    ui->pushButton->setText("stop");
+    ui->pushButton->setText("停止");
     ui->pushButton->setStyleSheet
             ("background-color: rgb(238, 99, 99);");
     timer->start(pre_time);
@@ -122,7 +122,7 @@ void Widget::stopButton(){
     timer->stop();
     ui->pushButton->setStyleSheet
             ("background-color: rgb(220, 220, 220);");
-    ui->pushButton->setText("start");
+    ui->pushButton->setText("开始");
     log.close();
 }
 
@@ -160,7 +160,7 @@ void Widget:: creatImg(){
     cpuLine->setName("cpu");
     cpuLine->setUseOpenGL(true);
     cpuLine->setColor(QColor(255,0,0));
-    memLine->setName("memory");
+    memLine->setName("内存");
     memLine->setUseOpenGL(true);
     memLine->setColor(QColor(0,45,245));
     m_chart->addSeries(cpuLine);
@@ -173,7 +173,7 @@ void Widget:: creatImg(){
     // axisX->setLabelFormat("%d S");
     QValueAxis *axisY = new QValueAxis;
     axisY->setRange(0,100);    //默认则坐标为动态计算大小的
-    axisY->setTitleText("CPU");
+    axisY->setTitleText("cpu");
     axisY->setLinePenColor(cpuLine->pen().color());
 
     m_chart->addAxis(axisX,Qt::AlignBottom);
@@ -183,7 +183,7 @@ void Widget:: creatImg(){
 
     QValueAxis *y2 = new QValueAxis;
     y2->setRange(0,1000);
-    y2->setTitleText("memory");
+    y2->setTitleText("内存");
     y2->setLinePenColor(memLine->pen().color());
     m_chart->addAxis(y2,Qt::AlignRight);
     memLine->attachAxis(axisX);

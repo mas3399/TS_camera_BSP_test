@@ -42,7 +42,7 @@
           </size>
          </property>
          <property name="text">
-          <string>Total memory: </string>
+          <string>总内存: </string>
          </property>
         </widget>
        </item>
@@ -61,7 +61,7 @@
           </size>
          </property>
          <property name="text">
-          <string>Available memory:</string>
+          <string>可用内存:</string>
          </property>
         </widget>
        </item>
@@ -80,7 +80,7 @@
           </size>
          </property>
          <property name="text">
-          <string>Total CPU usage: </string>
+          <string>总CPU使用率: </string>
          </property>
         </widget>
        </item>
@@ -104,21 +104,21 @@
    <item>
     <widget class="QLineEdit" name="lineEdit">
      <property name="placeholderText">
-      <string>timer time</string>
+      <string>采集时间</string>
      </property>
     </widget>
    </item>
    <item>
     <widget class="QLineEdit" name="lineEdit_2">
      <property name="placeholderText">
-      <string>T</string>
+      <string>采集周期</string>
      </property>
     </widget>
    </item>
    <item>
     <widget class="QPushButton" name="pushButton">
      <property name="text">
-      <string>start</string>
+      <string>开始</string>
      </property>
     </widget>
    </item>
